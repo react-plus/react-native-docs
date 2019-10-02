@@ -36,7 +36,7 @@ Add ``.env`` to your schema
 
    ![img](./images/ios.png)
 
-#### Step 4 add to your pod file 
+#### Step 4 add setting to your pod file  
 ```js
   post_install do |installer|
    installer.pods_project.targets.each do |target|
