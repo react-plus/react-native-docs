@@ -60,5 +60,70 @@ Add ``.env`` to your schema
 - Set ``Info.plist`` Preprocessor Prefix File to ``${BUILD_DIR}/GeneratedInfoPlistDotEnv.h``
 - Set ``Info.plist`` Other Preprocessor Flags to ``-traditional``
 
+### Native Usage
+Read variables declared in `.env` from your Obj-C classes like:
+
+```objective-c
+// import header
+#import "ReactNativeConfig.h"
+
+// then read individual keys like:
+NSString *apiUrl = [ReactNativeConfig envFor:@"API_URL"];
+
+// or just fetch the whole config
+NSDictionary *config = [ReactNativeConfig env];
+```
 
 ## Android
+### Config
+The same environment variable can be used to assemble releases with a different config:
+
+```
+$ cd android && ENVFILE=.env.staging ./gradlew assembleRelease
+```
+
+Alternatively, you can define a map in `build.gradle` associating builds with env files. Do it before the `apply from` call, and use build cases in lowercase, like:
+
+```
+project.ext.envConfigFiles = [
+    debug: ".env.development",
+    release: ".env.production",
+    anothercustombuild: ".env",
+]
+
+apply from: project(':react-native-config').projectDir.getPath() + "/dotenv.gradle"
+```
+
+### Native Usage
+Config variables set in `.env` are available to your Java classes via `BuildConfig`:
+
+```java
+public HttpURLConnection getApiClient() {
+    URL url = new URL(BuildConfig.API_URL);
+    // ...
+}
+```
+
+You can also read them from your Gradle configuration:
+
+```groovy
+defaultConfig {
+    applicationId project.env.get("APP_ID")
+}
+```
+
+And use them to configure libraries in `AndroidManifest.xml` and others:
+
+```xml
+<meta-data
+  android:name="com.google.android.geo.API_KEY"
+  android:value="@string/GOOGLE_MAPS_API_KEY" />
+```
+
+All variables are strings, so you may need to cast them. For instance, in Gradle:
+
+```
+versionCode project.env.get("VERSION_CODE").toInteger()
+```
+
+Once again, remember variables stored in `.env` are published with your code, so **DO NOT put anything sensitive there like your app `signingConfigs`.**
