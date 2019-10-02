@@ -27,6 +27,13 @@ Apply ``Config`` to your configurations
 
 #### Step 3
 Add ``.env`` to your schema
+- Expand the "Build" settings on left
+- Click "Pre-actions", and under the plus sign select "New Run Script Action"
+- Where it says "Type a script or drag a script file", type:
+    ```
+    echo ".env.staging" > /tmp/envfile   # replace .env.staging for your file
+    ```
+
    ![img](./images/ios.png)
 
 #### Step 4 add to your pod file 
