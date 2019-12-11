@@ -40,7 +40,7 @@ Add ``.env`` to your schema
 ```js
   post_install do |installer|
    installer.pods_project.targets.each do |target|
-     if target.name == ‘react-native-config’
+     if target.name == 'react-native-config'
         phase = target.project.new(Xcodeproj::Project::Object::PBXShellScriptBuildPhase)
         phase.shell_script = "cd ../../"\
         " && RNC_ROOT=./node_modules/react-native-config/"\
